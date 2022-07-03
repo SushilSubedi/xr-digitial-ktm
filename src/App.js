@@ -1,25 +1,14 @@
-import logo from './logo.svg';
+import React from 'react';
+import CustomSlider from './components/Slider';
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="w-100 h-100">
+      <h3>Tasks List</h3>
+      <CustomSlider />
     </div>
   );
-}
+};
 
 export default App;
