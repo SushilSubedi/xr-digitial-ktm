@@ -9,7 +9,7 @@ const CustomSlider = () => {
   const [sliderValue, setValue] = useState(null);
 
   return (
-    <div className="d-flex h-100 justify-content-center align-items-center">
+    <div className="d-flex h-50 justify-content-center align-items-center">
       <div className="mb-1">
         <Slider
           value={sliderValue}
