@@ -32,7 +32,7 @@ const CustomSlider = () => {
         min={0}
         max={1}
         step={0.01}
-        placeholder="%"
+        placeholder="0%"
         value={sliderValue}
         onChange={(e) => setValue(e.value)}
       />
