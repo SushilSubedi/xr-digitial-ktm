@@ -1,11 +1,11 @@
 export const PRODUCT_TABLE_HEADER = [
   {
     Header: 'Name',
-    accessor: 'product_name',
+    accessor: 'productName',
   },
   {
     Header: 'Category',
-    accessor: 'category_name',
+    accessor: 'categoryName',
   },
   {
     Header: 'Description',
@@ -13,7 +13,7 @@ export const PRODUCT_TABLE_HEADER = [
   },
   {
     Header: 'Created At',
-    accessor: 'created_at',
+    accessor: 'createdAt',
   },
   {
     Header: 'Status',

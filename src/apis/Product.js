@@ -13,6 +13,11 @@ class ProductApi extends BaseRequest {
     return this.get(URLS.FETCH_ALL_PRODUCTS);
   }
 
+  /**
+   *
+   * @param {init} productID - ID of individual product
+   * @returns
+   */
   static deleteProduct(productID) {
     const deleteUrl = URLS.DELETE_PRODUCT_URL.replace(':product_id', productID);
 
