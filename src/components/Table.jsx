@@ -4,11 +4,14 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useTable } from 'react-table';
+import AddProductModal from './Modal/AddProductModal';
 import DeleteProductModal from './Modal/DeleteProductModal';
+import EditProductModal from './Modal/EditProductModal';
 
 const MODAL_TYPE = {
   DELETE: 'delete',
   ADD: 'add',
+  EDIT: 'edit',
 };
 
 const Table = () => {
@@ -19,9 +22,9 @@ const Table = () => {
     name: '',
   });
 
-  const handleProductDelete = (product) => {
+  const selectProductHandler = (product, modalType) => {
     setSelectedProduct(product);
-    setActiveModal(MODAL_TYPE.DELETE);
+    setActiveModal(modalType);
   };
 
   const updateTableData = (data) => {
@@ -41,10 +44,25 @@ const Table = () => {
           description,
           createdAt: createdAt.split('T')[0],
           status,
-          action: (
+          edit: (
+            <button
+              className="btn btn-success p-2 h-auto"
+              onClick={() =>
+                selectProductHandler({ id, name: productName }, MODAL_TYPE.EDIT)
+              }
+            >
+              Edit
+            </button>
+          ),
+          delete: (
             <button
               className="btn btn-danger p-2 h-auto"
-              onClick={() => handleProductDelete({ id, name: productName })}
+              onClick={() =>
+                selectProductHandler(
+                  { id, name: productName },
+                  MODAL_TYPE.DELETE
+                )
+              }
             >
               Delete
             </button>
@@ -74,7 +92,12 @@ const Table = () => {
   return (
     <article className="container">
       <div className="table-header my-3 h-auto">
-        <button className="btn btn-primary h-auto">Add New Product</button>
+        <button
+          className="btn btn-primary h-auto"
+          onClick={() => setActiveModal(MODAL_TYPE.ADD)}
+        >
+          Add New Product
+        </button>
       </div>
       <table {...getTableProps()} className="table table-striped table-hover">
         <thead>
@@ -110,6 +133,16 @@ const Table = () => {
           );
           setActiveModal(null);
         }}
+        handleCancel={() => setActiveModal(null)}
+      />
+      <AddProductModal
+        isVisible={showActiveModal === MODAL_TYPE.ADD}
+        handleConfirm={() => {}}
+        handleCancel={() => setActiveModal(null)}
+      />
+      <EditProductModal
+        isVisible={showActiveModal === MODAL_TYPE.EDIT}
+        handleConfirm={() => {}}
         handleCancel={() => setActiveModal(null)}
       />
     </article>

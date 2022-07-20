@@ -4,7 +4,7 @@
       "id": 1,
       "product_name": "Cheese",
       "category_name": "dairy",
-      "description": "Cheese has been used by humans to provide both fresh and storable nutritious foods.",
+      "description": "Cheese has been used by humans.",
       "created_at": "2021-07-14T12:47:26.746Z",
       "created_by": "new village farmer",
       "status": "In stock"
@@ -31,7 +31,7 @@
       "id": 4,
       "product_name": "Basundi",
       "category_name": "dairy",
-      "description": " It is a sweetened condensed milk made by boiling milk on low heat until the milk is reduced by half",
+      "description": " It is a sweetened condensed milk made by boiling milk",
       "created_at": "2022-06-09T20:47:26.746Z",
       "created_by": "kathmandu dairy product",
       "status": "Out off stock"

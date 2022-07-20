@@ -21,6 +21,10 @@ export const PRODUCT_TABLE_HEADER = [
   },
   {
     Header: '',
-    accessor: 'action',
+    accessor: 'edit',
+  },
+  {
+    Header: '',
+    accessor: 'delete',
   },
 ];
