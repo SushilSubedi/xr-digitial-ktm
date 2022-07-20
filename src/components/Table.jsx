@@ -4,12 +4,24 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useTable } from 'react-table';
+import DeleteProductModal from './Modal/DeleteProductModal';
+
+const MODAL_TYPE = {
+  DELETE: 'delete',
+  ADD: 'add',
+};
 
 const Table = () => {
   const [tableData, setTableData] = useState([]);
+  const [showActiveModal, setActiveModal] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState({
+    id: null,
+    name: '',
+  });
 
-  const handleProductDelete = (selectedID) => {
-    setTableData((previous) => previous.filter(({ id }) => id !== selectedID));
+  const handleProductDelete = (product) => {
+    setSelectedProduct(product);
+    setActiveModal(MODAL_TYPE.DELETE);
   };
 
   const updateTableData = (data) => {
@@ -32,7 +44,7 @@ const Table = () => {
           action: (
             <button
               className="btn btn-danger p-2 h-auto"
-              onClick={() => handleProductDelete(id)}
+              onClick={() => handleProductDelete({ id, name: productName })}
             >
               Delete
             </button>
@@ -89,6 +101,17 @@ const Table = () => {
           })}
         </tbody>
       </table>
+      <DeleteProductModal
+        isVisible={showActiveModal === MODAL_TYPE.DELETE}
+        productName={selectedProduct.name}
+        handleConfirm={() => {
+          setTableData((previous) =>
+            previous.filter(({ id }) => id !== selectedProduct.id)
+          );
+          setActiveModal(null);
+        }}
+        handleCancel={() => setActiveModal(null)}
+      />
     </article>
   );
 };

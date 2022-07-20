@@ -11,3 +11,23 @@
 .k-button {
   height: 2em;
 }
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  cursor: default;
+  inset: 0;
+  z-index: 100;
+}
+
+.custom-modal {
+  width: 30em;
+  height: fit-content;
+  border-radius: 0.06em;
+}
+
+h5,
+p,
+button {
+  line-height: 1.4rem;
+}
