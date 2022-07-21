@@ -60,7 +60,7 @@
       "category_name": "electronic",
       "description": "High Quality Display",
       "created_at": "2012-06-09T20:20:26.746Z",
-      "created_by": "Sandesh Electronic",
+      "created_by": "Sandesh Electronics",
       "status": "In stock"
     },
     {
@@ -116,6 +116,15 @@
       "status": "available",
       "created_at": "2022-07-21T04:01:26.860Z",
       "id": 13
+    },
+    {
+      "product_name": "as",
+      "category_name": "as",
+      "created_by": "as",
+      "description": "as",
+      "status": "as",
+      "created_at": "2022-07-21T16:41:21.645Z",
+      "id": 14
     }
   ],
   "product_categories": [

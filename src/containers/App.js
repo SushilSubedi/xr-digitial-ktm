@@ -6,7 +6,7 @@ import ProductTable from 'components/ProductTable';
 const App = () => {
   return (
     <div className="w-100 h-100">
-      {/* <CustomSlider /> */}
+      <CustomSlider />
       <ProductTable />
     </div>
   );
