@@ -4,6 +4,7 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useTable } from 'react-table';
+import { useSortBy } from 'react-table/dist/react-table.development';
 import AddProductModal from './Modal/AddProductModal';
 import DeleteProductModal from './Modal/DeleteProductModal';
 import EditProductModal from './Modal/EditProductModal';
@@ -29,6 +30,14 @@ const ProductTable = () => {
     initialSelectedProduct
   );
 
+  const rowData = (cell) => {
+    if (cell.column.id == 'createdAt') {
+      return new Date(cell.value).toISOString().split('T')[0];
+    }
+
+    return cell.render('Cell');
+  };
+
   const selectProductHandler = (product, modalType) => {
     setSelectedProduct(product);
     setActiveModal(modalType);
@@ -49,7 +58,7 @@ const ProductTable = () => {
           productName,
           categoryName,
           description,
-          createdAt: createdAt.split('T')[0],
+          createdAt: new Date(createdAt),
           status,
           edit: (
             <button
@@ -133,7 +142,7 @@ const ProductTable = () => {
             productName,
             categoryName,
             description,
-            createdAt: createdAt.split('T')[0],
+            createdAt: new Date(createdAt),
             status,
             edit: (
               <button
@@ -205,7 +214,7 @@ const ProductTable = () => {
           productName,
           categoryName,
           description,
-          createdAt: createdAt.split('T')[0],
+          createdAt: new Date(createdAt),
           status,
           edit: (
             <button
@@ -260,7 +269,7 @@ const ProductTable = () => {
   }, []);
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns: PRODUCT_TABLE_HEADER, data: tableData });
+    useTable({ columns: PRODUCT_TABLE_HEADER, data: tableData }, useSortBy);
 
   return (
     <article className="container">
@@ -278,6 +287,7 @@ const ProductTable = () => {
           getTableBodyProps={getTableBodyProps}
           rows={rows}
           prepareRow={prepareRow}
+          rowData={rowData}
         />
       </Table>
       <DeleteProductModal

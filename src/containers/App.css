@@ -44,3 +44,22 @@ button {
 .error-message {
   color: rgb(153, 63, 63);
 }
+
+.sort-down-icon {
+  color: rgb(114, 107, 107);
+  top: 7%;
+}
+
+.sort-down-icon.disabled {
+  color: rgb(227, 214, 214);
+  pointer-events: none;
+}
+
+.sort-up-icon {
+  color: rgb(114, 107, 107);
+}
+
+.sort-up-icon.disabled {
+  color: rgb(227, 214, 214);
+  pointer-events: none;
+}

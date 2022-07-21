@@ -116,24 +116,6 @@
       "status": "available",
       "created_at": "2022-07-21T04:01:26.860Z",
       "id": 13
-    },
-    {
-      "product_name": "asmt",
-      "category_name": "as",
-      "created_by": "da",
-      "description": "as",
-      "status": "as",
-      "created_at": "2022-07-21T04:07:30.906Z",
-      "id": 14
-    },
-    {
-      "product_name": "daad",
-      "category_name": "asas",
-      "created_by": "as",
-      "description": "as",
-      "status": "as",
-      "created_at": "2022-07-21T04:10:41.324Z",
-      "id": 15
     }
   ],
   "product_categories": [

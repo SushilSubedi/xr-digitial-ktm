@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 const Table = ({ children, getTableProps, className }) => (
-  <table {...getTableProps()} className={`table table-borderless ${className}`}>
+  <table {...getTableProps()} className={`table table-hover ${className}`}>
     {children}
   </table>
 );
@@ -11,7 +11,7 @@ const Table = ({ children, getTableProps, className }) => (
 Table.defaultProps = {
   getTableProps: () => {},
   children: <></>,
-  className: "min-table px-3",
+  className: 'min-table px-3',
 };
 
 Table.propTypes = {
