@@ -3,8 +3,8 @@ import { PRODUCT_TABLE_HEADER } from 'constants/tableHeader';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useTable } from 'react-table';
-import { useSortBy } from 'react-table/dist/react-table.development';
+import { useTable, useSortBy, usePagination } from 'react-table';
+
 import AddProductModal from './Modal/AddProductModal';
 import DeleteProductModal from './Modal/DeleteProductModal';
 import EditProductModal from './Modal/EditProductModal';
@@ -268,8 +268,33 @@ const ProductTable = () => {
     fetchTableData();
   }, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns: PRODUCT_TABLE_HEADER, data: tableData }, useSortBy);
+  useEffect(() => {
+    setPageSize(5);
+  }, []);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    pageOptions,
+    nextPage,
+    previousPage,
+    canPreviousPage,
+    canNextPage,
+    setPageSize,
+    pageSize,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns: PRODUCT_TABLE_HEADER,
+      data: tableData,
+      initialState: { pageIndex: 1 },
+    },
+    useSortBy,
+    usePagination
+  );
 
   return (
     <article className="container">
@@ -285,7 +310,7 @@ const ProductTable = () => {
         <TableHeader headerGroups={headerGroups} />
         <TableBody
           getTableBodyProps={getTableBodyProps}
-          rows={rows}
+          rows={page}
           prepareRow={prepareRow}
           rowData={rowData}
         />
@@ -309,6 +334,40 @@ const ProductTable = () => {
           (item) => item.id === selectedProduct.id
         )}
       />
+      <div className="pagination d-flex align-items-center">
+        <button
+          className="btn btn-outline-secondary px-3"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
+          {'<'}
+        </button>{' '}
+        <button
+          className="btn btn-outline-secondary px-3 mx-3"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
+          {'>'}
+        </button>{' '}
+        <span className="text-center me-3">
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[5, 10, 15, 20, 25].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
     </article>
   );
 };
