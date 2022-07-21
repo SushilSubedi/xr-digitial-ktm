@@ -1,0 +1,46 @@
+.input-field {
+  height: 2.5em;
+  width: 7em;
+}
+
+.input-field input,
+.input-field .k-input-spinner {
+  height: inherit;
+}
+
+.k-button {
+  height: 2em;
+}
+
+.overlay {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 0;
+  cursor: default;
+  inset: 0;
+  z-index: 100;
+}
+
+.custom-modal {
+  width: 30em;
+  height: fit-content;
+  border-radius: 0.06em;
+}
+
+h5,
+p,
+button {
+  line-height: 1.4rem;
+}
+
+.form-control .error {
+  border: 0.0625em solid rgb(153, 63, 63);
+  color: rgb(153, 63, 63);
+}
+
+.form-control .error ::placeholder {
+  color: rgb(153, 63, 63);
+}
+
+.error-message {
+  color: rgb(153, 63, 63);
+}
