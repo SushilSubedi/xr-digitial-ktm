@@ -1,13 +1,27 @@
 import React from 'react';
 import { Field, Form } from 'react-final-form';
+import PropTypes from 'prop-types';
+
 import { required } from 'utils/validation';
 import InputField from './InputField';
 
-const ProductForm = ({ handleCancel, handleConfirm }) => {
-  const onSubmitHandler = () => {};
+const ProductForm = ({
+  handleCancel,
+  handleConfirm,
+  initialValues,
+  editForm,
+}) => {
+  const onSubmitHandler = (product) => {
+    if (!editForm) {
+      product.created_at = new Date().toISOString();
+    }
+    handleConfirm(product);
+  };
+
+  const updatedText = editForm ? 'Update' : 'Save';
 
   return (
-    <Form onSubmit={onSubmitHandler}>
+    <Form onSubmit={onSubmitHandler} initialValues={initialValues}>
       {({ handleSubmit, submitting, submitError, pristine }) => (
         <form
           className="w-100 needs-validation form-control border-0"
@@ -69,17 +83,33 @@ const ProductForm = ({ handleCancel, handleConfirm }) => {
             </button>
             <button
               className="btn btn-primary h-auto py-2 px-4"
-              onClick={handleConfirm}
               disabled={submitting || pristine}
               type="submit"
             >
-              Save
+              {updatedText}
             </button>
           </div>
         </form>
       )}
     </Form>
   );
+};
+
+ProductForm.defaultProps = {
+  handleCancel: () => {},
+  handleConfirm: () => {},
+  initialValues: null,
+  editForm: false,
+};
+
+ProductForm.propTypes = {
+  handleCancel: PropTypes.func,
+  handleConfirm: PropTypes.func,
+  initialValues: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.shape([]),
+  ]),
+  editForm: PropTypes.bool,
 };
 
 export default ProductForm;

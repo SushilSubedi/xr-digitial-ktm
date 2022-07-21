@@ -5,7 +5,12 @@ import PropTypes from 'prop-types';
 import Modal from 'components/Modal/Modal';
 import ProductForm from 'components/Form/ProductForm';
 
-const EditProductModal = ({ isVisible, handleConfirm, handleCancel }) => {
+const EditProductModal = ({
+  isVisible,
+  handleConfirm,
+  handleCancel,
+  initialValues,
+}) => {
   return (
     <Modal
       isVisible={isVisible}
@@ -18,6 +23,8 @@ const EditProductModal = ({ isVisible, handleConfirm, handleCancel }) => {
         <ProductForm
           handleCancel={handleCancel}
           handleConfirm={handleConfirm}
+          initialValues={initialValues}
+          editForm
         />
       </div>
     </Modal>

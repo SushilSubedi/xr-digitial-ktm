@@ -15,12 +15,16 @@ const MODAL_TYPE = {
 };
 
 const Table = () => {
-  const [tableData, setTableData] = useState([]);
-  const [showActiveModal, setActiveModal] = useState(null);
-  const [selectedProduct, setSelectedProduct] = useState({
+  const initialSelectedProduct = {
     id: null,
     name: '',
-  });
+  };
+  const [tableData, setTableData] = useState([]);
+  const [initialData, setInitialData] = useState([]);
+  const [showActiveModal, setActiveModal] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(
+    initialSelectedProduct
+  );
 
   const selectProductHandler = (product, modalType) => {
     setSelectedProduct(product);
@@ -72,13 +76,179 @@ const Table = () => {
     );
   };
 
+  const handleCancel = () => {
+    setSelectedProduct(initialSelectedProduct);
+    setActiveModal(null);
+  };
+
+  const deleteProductHandler = async () => {
+    try {
+      await ProductApi.deleteProduct(selectedProduct.id);
+
+      setTableData((previous) =>
+        previous.filter(({ id }) => id !== selectedProduct.id)
+      );
+      setActiveModal(null);
+      setInitialData((previous) =>
+        previous.filter(({ id }) => id !== selectedProduct.id)
+      );
+    } catch (error) {
+      alert(`Failed to delete ${selectedProduct.name}`);
+    }
+  };
+
   const fetchTableData = async () => {
     try {
       const response = await ProductApi.fetchProducts();
 
       setTableData(updateTableData(response.data));
+      setInitialData(response.data);
     } catch (error) {
       alert('Please start your JSON server');
+    }
+  };
+
+  const AddProductHandler = async (product) => {
+    try {
+      const {
+        data: {
+          id,
+          product_name: productName,
+          category_name: categoryName,
+          description,
+          created_at: createdAt,
+          status,
+          ...rest
+        },
+      } = await ProductApi.addProduct(product);
+
+      setTableData((previous) => {
+        return [
+          ...previous,
+          {
+            id,
+            productName,
+            categoryName,
+            description,
+            createdAt: createdAt.split('T')[0],
+            status,
+            edit: (
+              <button
+                className="btn btn-success p-2 h-auto"
+                onClick={() =>
+                  selectProductHandler(
+                    { id, name: productName },
+                    MODAL_TYPE.EDIT
+                  )
+                }
+              >
+                Edit
+              </button>
+            ),
+            delete: (
+              <button
+                className="btn btn-danger p-2 h-auto"
+                onClick={() =>
+                  selectProductHandler(
+                    { id, name: productName },
+                    MODAL_TYPE.DELETE
+                  )
+                }
+              >
+                Delete
+              </button>
+            ),
+          },
+        ];
+      });
+      handleCancel();
+      setInitialData((previous) => [
+        ...previous,
+        {
+          id,
+          product_name: productName,
+          category_name: categoryName,
+          description,
+          created_at: createdAt,
+          status,
+          ...rest,
+        },
+      ]);
+    } catch (error) {
+      alert(`Failed to add ${product.product_name}`);
+    }
+  };
+
+  const updateProductHandler = async (product) => {
+    try {
+      const {
+        data: {
+          id,
+          product_name: productName,
+          category_name: categoryName,
+          description,
+          created_at: createdAt,
+          status,
+          ...rest
+        },
+      } = await ProductApi.updateProduct(selectedProduct.id, product);
+      const tableIndex = tableData.findIndex(({ id }) => id === product.id);
+      const dataIndex = initialData.findIndex(({ id }) => id === product.id);
+
+      setTableData((previous) => {
+        const copiedData = [...previous];
+        copiedData[tableIndex] = {
+          id,
+          productName,
+          categoryName,
+          description,
+          createdAt: createdAt.split('T')[0],
+          status,
+          edit: (
+            <button
+              className="btn btn-success p-2 h-auto"
+              onClick={() =>
+                selectProductHandler({ id, name: productName }, MODAL_TYPE.EDIT)
+              }
+            >
+              Edit
+            </button>
+          ),
+          delete: (
+            <button
+              className="btn btn-danger p-2 h-auto"
+              onClick={() =>
+                selectProductHandler(
+                  { id, name: productName },
+                  MODAL_TYPE.DELETE
+                )
+              }
+            >
+              Delete
+            </button>
+          ),
+        };
+
+        return copiedData;
+      });
+
+      setInitialData((previous) => {
+        const copiedData = [...previous];
+        copiedData[dataIndex] = {
+          id,
+          product_name: productName,
+          category_name: categoryName,
+          description,
+          created_at: createdAt,
+          status,
+          ...rest,
+        };
+
+        return copiedData;
+      });
+      handleCancel();
+    } catch (error) {
+      alert(`Failed to update ${selectedProduct.name}`);
     }
   };
 
@@ -127,23 +297,21 @@ const Table = () => {
       <DeleteProductModal
         isVisible={showActiveModal === MODAL_TYPE.DELETE}
         productName={selectedProduct.name}
-        handleConfirm={() => {
-          setTableData((previous) =>
-            previous.filter(({ id }) => id !== selectedProduct.id)
-          );
-          setActiveModal(null);
-        }}
-        handleCancel={() => setActiveModal(null)}
+        handleConfirm={deleteProductHandler}
+        handleCancel={handleCancel}
       />
       <AddProductModal
         isVisible={showActiveModal === MODAL_TYPE.ADD}
-        handleConfirm={() => {}}
-        handleCancel={() => setActiveModal(null)}
+        handleConfirm={AddProductHandler}
+        handleCancel={handleCancel}
       />
       <EditProductModal
         isVisible={showActiveModal === MODAL_TYPE.EDIT}
-        handleConfirm={() => {}}
-        handleCancel={() => setActiveModal(null)}
+        handleConfirm={updateProductHandler}
+        handleCancel={handleCancel}
+        initialValues={initialData.find(
+          (item) => item.id === selectedProduct.id
+        )}
       />
     </article>
   );
