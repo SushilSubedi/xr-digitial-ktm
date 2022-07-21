@@ -9,6 +9,10 @@ const URLS = {
 };
 
 class ProductApi extends BaseRequest {
+  /**
+   * fetch all product list
+   * @returns
+   */
   static fetchProducts() {
     return this.get(URLS.ALL_PRODUCTS);
   }
