@@ -7,6 +7,9 @@ import { useTable } from 'react-table';
 import AddProductModal from './Modal/AddProductModal';
 import DeleteProductModal from './Modal/DeleteProductModal';
 import EditProductModal from './Modal/EditProductModal';
+import Table from './Table/Table';
+import TableBody from './Table/TableBody';
+import TableHeader from './Table/TableHeader';
 
 const MODAL_TYPE = {
   DELETE: 'delete',
@@ -14,7 +17,7 @@ const MODAL_TYPE = {
   EDIT: 'edit',
 };
 
-const Table = () => {
+const ProductTable = () => {
   const initialSelectedProduct = {
     id: null,
     name: '',
@@ -269,31 +272,14 @@ const Table = () => {
           Add New Product
         </button>
       </div>
-      <table {...getTableProps()} className="table table-striped table-hover">
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+      <Table getTableProps={getTableProps}>
+        <TableHeader headerGroups={headerGroups} />
+        <TableBody
+          getTableBodyProps={getTableBodyProps}
+          rows={rows}
+          prepareRow={prepareRow}
+        />
+      </Table>
       <DeleteProductModal
         isVisible={showActiveModal === MODAL_TYPE.DELETE}
         productName={selectedProduct.name}
@@ -317,4 +303,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default ProductTable;
