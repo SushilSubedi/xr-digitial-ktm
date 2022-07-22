@@ -1,5 +1,3 @@
-import ProductApi from 'apis/Product';
-import { PRODUCT_TABLE_HEADER } from 'constants/tableHeader';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -13,6 +11,8 @@ import EditProductModal from './Modal/EditProductModal';
 import Table from './Table/Table';
 import TableBody from './Table/TableBody';
 import TableHeader from './Table/TableHeader';
+import ProductApi from '../apis/Product';
+import { PRODUCT_TABLE_HEADER } from '../constants/tableHeader';
 
 const MODAL_TYPE = {
   DELETE: 'delete',

@@ -7,7 +7,9 @@ const EmptyContent = ({ show }) => {
 
   return (
     <div className="empty-content d-flex justify-content-center align-items-center">
-      <p className="fw-bold fs-5">No Table Content</p>
+      <p className="fw-bold fs-5">
+        No Table Content. you might need to start your json server
+      </p>
     </div>
   );
 };
