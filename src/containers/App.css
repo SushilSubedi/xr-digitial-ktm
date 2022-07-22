@@ -67,3 +67,13 @@ button {
 .slider {
   border-bottom: 0.0625em solid rgb(126, 121, 121);
 }
+
+.search-bar {
+  border-radius: 0.4em;
+  width: 20em;
+  border: 0.0825em solid rgb(126, 121, 121);
+}
+
+.empty-content {
+  min-height: 10em;
+}

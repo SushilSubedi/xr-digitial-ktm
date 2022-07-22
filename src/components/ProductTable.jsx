@@ -4,6 +4,8 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useTable, useSortBy, usePagination } from 'react-table';
+import EmptyContent from './Empty/EmptyContent';
+import NoSearchContent from './Empty/NoSearchContent';
 
 import AddProductModal from './Modal/AddProductModal';
 import DeleteProductModal from './Modal/DeleteProductModal';
@@ -29,6 +31,7 @@ const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState(
     initialSelectedProduct
   );
+  const [searchText, setSearchText] = useState('');
 
   const rowData = (cell) => {
     if (cell.column.id == 'createdAt') {
@@ -272,6 +275,25 @@ const ProductTable = () => {
     setPageSize(5);
   }, []);
 
+  useEffect(() => {
+    if (searchText == '') {
+      return setTableData(updateTableData(initialData));
+    }
+
+    const updatedTableData = [];
+    for (let i = 0; i < tableData.length; i++) {
+      const name = tableData[i].productName.toLowerCase();
+      if (
+        name.includes(searchText.toLowerCase()) &&
+        name.charAt(0) == searchText.charAt(0)
+      ) {
+        updatedTableData.push(tableData[i]);
+      }
+    }
+
+    setTableData(updatedTableData);
+  }, [searchText]);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -290,7 +312,7 @@ const ProductTable = () => {
     {
       columns: PRODUCT_TABLE_HEADER,
       data: tableData,
-      initialState: { pageIndex: 1 },
+      initialState: { pageIndex: 0 },
     },
     useSortBy,
     usePagination
@@ -299,13 +321,20 @@ const ProductTable = () => {
   return (
     <article className="container pt-4">
       <h4>Task 2: CRUD Operation</h4>
-      <div className="table-header my-3 h-auto">
+      <div className="table-header my-3 h-auto d-flex justify-content-between">
         <button
           className="btn btn-primary h-auto"
           onClick={() => setActiveModal(MODAL_TYPE.ADD)}
         >
           Add New Product
         </button>
+        <input
+          type="text"
+          aria-describedby="searchBar"
+          className="search-bar p-2"
+          placeholder="Search by product name"
+          onChange={(e) => setSearchText(e.target.value)}
+        />
       </div>
       <Table getTableProps={getTableProps}>
         <TableHeader headerGroups={headerGroups} />
@@ -316,6 +345,8 @@ const ProductTable = () => {
           rowData={rowData}
         />
       </Table>
+      <EmptyContent show={!searchText && tableData.length == 0} />
+      <NoSearchContent show={searchText && tableData.length == 0} />
       <DeleteProductModal
         isVisible={showActiveModal === MODAL_TYPE.DELETE}
         productName={selectedProduct.name}
@@ -335,6 +366,7 @@ const ProductTable = () => {
           (item) => item.id === selectedProduct.id
         )}
       />
+
       <div className="pagination d-flex align-items-center">
         <button
           className="btn btn-outline-secondary px-3"
@@ -342,19 +374,19 @@ const ProductTable = () => {
           disabled={!canPreviousPage}
         >
           {'<'}
-        </button>{' '}
+        </button>
         <button
           className="btn btn-outline-secondary px-3 mx-3"
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
           {'>'}
-        </button>{' '}
+        </button>
         <span className="text-center me-3">
-          Page{' '}
+          Page
           <strong>
             {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
+          </strong>
         </span>
         <select
           value={pageSize}
