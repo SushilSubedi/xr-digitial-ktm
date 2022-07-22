@@ -2,6 +2,9 @@
 
 1. Clone the project to your local machine
 2. Go inside the project and run `npm install` to install all packages used by the app
+3. Go inside the project and run `npm run start-json-server` to start JSON server.
+4. If you are running Window then `npm run start-pc` to start server.
+5. If you are running mac or linux `npm run start` to start server.
 
 ### TASKS
 

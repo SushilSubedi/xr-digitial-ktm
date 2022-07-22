@@ -44,3 +44,36 @@ button {
 .error-message {
   color: rgb(153, 63, 63);
 }
+
+.sort-down-icon {
+  color: rgb(114, 107, 107);
+  top: 7%;
+}
+
+.sort-down-icon.disabled {
+  color: rgb(227, 214, 214);
+  pointer-events: none;
+}
+
+.sort-up-icon {
+  color: rgb(114, 107, 107);
+}
+
+.sort-up-icon.disabled {
+  color: rgb(227, 214, 214);
+  pointer-events: none;
+}
+
+.slider {
+  border-bottom: 0.0625em solid rgb(126, 121, 121);
+}
+
+.search-bar {
+  border-radius: 0.4em;
+  width: 20em;
+  border: 0.0825em solid rgb(126, 121, 121);
+}
+
+.empty-content {
+  min-height: 10em;
+}

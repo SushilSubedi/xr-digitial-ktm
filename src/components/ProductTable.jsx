@@ -3,7 +3,10 @@ import { PRODUCT_TABLE_HEADER } from 'constants/tableHeader';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useTable } from 'react-table';
+import { useTable, useSortBy, usePagination } from 'react-table';
+import EmptyContent from './Empty/EmptyContent';
+import NoSearchContent from './Empty/NoSearchContent';
+
 import AddProductModal from './Modal/AddProductModal';
 import DeleteProductModal from './Modal/DeleteProductModal';
 import EditProductModal from './Modal/EditProductModal';
@@ -28,6 +31,15 @@ const ProductTable = () => {
   const [selectedProduct, setSelectedProduct] = useState(
     initialSelectedProduct
   );
+  const [searchText, setSearchText] = useState('');
+
+  const rowData = (cell) => {
+    if (cell.column.id == 'createdAt') {
+      return new Date(cell.value).toISOString().split('T')[0];
+    }
+
+    return cell.render('Cell');
+  };
 
   const selectProductHandler = (product, modalType) => {
     setSelectedProduct(product);
@@ -49,7 +61,7 @@ const ProductTable = () => {
           productName,
           categoryName,
           description,
-          createdAt: createdAt.split('T')[0],
+          createdAt: new Date(createdAt),
           status,
           edit: (
             <button
@@ -133,7 +145,7 @@ const ProductTable = () => {
             productName,
             categoryName,
             description,
-            createdAt: createdAt.split('T')[0],
+            createdAt: new Date(createdAt),
             status,
             edit: (
               <button
@@ -205,7 +217,7 @@ const ProductTable = () => {
           productName,
           categoryName,
           description,
-          createdAt: createdAt.split('T')[0],
+          createdAt: new Date(createdAt),
           status,
           edit: (
             <button
@@ -259,27 +271,82 @@ const ProductTable = () => {
     fetchTableData();
   }, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns: PRODUCT_TABLE_HEADER, data: tableData });
+  useEffect(() => {
+    setPageSize(5);
+  }, []);
+
+  useEffect(() => {
+    if (searchText == '') {
+      return setTableData(updateTableData(initialData));
+    }
+
+    const updatedTableData = [];
+    for (let i = 0; i < tableData.length; i++) {
+      const name = tableData[i].productName.toLowerCase();
+      if (
+        name.includes(searchText.toLowerCase()) &&
+        name.charAt(0) == searchText.charAt(0)
+      ) {
+        updatedTableData.push(tableData[i]);
+      }
+    }
+
+    setTableData(updatedTableData);
+  }, [searchText]);
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    prepareRow,
+    pageOptions,
+    nextPage,
+    previousPage,
+    canPreviousPage,
+    canNextPage,
+    setPageSize,
+    pageSize,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns: PRODUCT_TABLE_HEADER,
+      data: tableData,
+      initialState: { pageIndex: 0 },
+    },
+    useSortBy,
+    usePagination
+  );
 
   return (
-    <article className="container">
-      <div className="table-header my-3 h-auto">
+    <article className="container pt-4">
+      <h4>Task 2: CRUD Operation</h4>
+      <div className="table-header my-3 h-auto d-flex justify-content-between">
         <button
           className="btn btn-primary h-auto"
           onClick={() => setActiveModal(MODAL_TYPE.ADD)}
         >
           Add New Product
         </button>
+        <input
+          type="text"
+          aria-describedby="searchBar"
+          className="search-bar p-2"
+          placeholder="Search by product name"
+          onChange={(e) => setSearchText(e.target.value)}
+        />
       </div>
       <Table getTableProps={getTableProps}>
         <TableHeader headerGroups={headerGroups} />
         <TableBody
           getTableBodyProps={getTableBodyProps}
-          rows={rows}
+          rows={page}
           prepareRow={prepareRow}
+          rowData={rowData}
         />
       </Table>
+      <EmptyContent show={!searchText && tableData.length == 0} />
+      <NoSearchContent show={searchText && tableData.length == 0} />
       <DeleteProductModal
         isVisible={showActiveModal === MODAL_TYPE.DELETE}
         productName={selectedProduct.name}
@@ -299,6 +366,41 @@ const ProductTable = () => {
           (item) => item.id === selectedProduct.id
         )}
       />
+
+      <div className="pagination d-flex align-items-center">
+        <button
+          className="btn btn-outline-secondary px-3"
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
+          {'<'}
+        </button>
+        <button
+          className="btn btn-outline-secondary px-3 mx-3"
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
+          {'>'}
+        </button>
+        <span className="text-center me-3">
+          Page
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>
+        </span>
+        <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+        >
+          {[5, 10, 15, 20, 25].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
     </article>
   );
 };
